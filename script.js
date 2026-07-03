@@ -8,6 +8,24 @@
   });
 })();
 
+/* ── Countdown timer da oferta ── */
+(function () {
+  var total = 15 * 60;
+  var el = document.getElementById("countdown-timer");
+  if (!el) return;
+  var interval = setInterval(function () {
+    total--;
+    if (total <= 0) {
+      clearInterval(interval);
+      el.textContent = "00:00";
+      return;
+    }
+    var m = Math.floor(total / 60);
+    var s = total % 60;
+    el.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }, 1000);
+})();
+
 /* ── Modal de depoimentos ── */
 (function () {
   var modal   = document.getElementById("video-modal");
