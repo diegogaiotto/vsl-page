@@ -494,15 +494,15 @@ body {
 }
 
 .cta-installments {
-  font-size: clamp(1.6rem, 5.5vw, 2.4rem);
+  font-size: clamp(2rem, 6.5vw, 3rem);
   font-weight: 700;
   color: var(--yellow);
   line-height: 1.1;
 }
 
 .cta-installments strong {
-  font-size: clamp(2.2rem, 7vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  font-weight: 900;
 }
 
 .cta-cash {
