@@ -32,20 +32,55 @@
 <body>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 1 — Headline + Vídeo (sempre visível)
+       SEÇÃO 1 — Headline (teste A/B) + Vídeo
   ══════════════════════════════════════════ -->
   <section class="hero">
     <div class="container">
 
-      <h1 class="headline">
-        Você não precisa de mais uma estratégia cara e demorada — use o
-        <span class="highlight">método de 22 horas</span>
-        para fazer sua primeira venda
+      <h1 class="headline" id="js-headline">
+        Primeira Venda com IA em 22 Horas: o <span class="highlight">Micro-Serviço que abre a porta</span> pra um Ecossistema inteiro de renda — mesmo começando do zero hoje
       </h1>
+
+      <!--
+        ▼▼▼ TESTE A/B DA HEADLINE ▼▼▼
+        As duas versões ficam aqui, isoladas, em texto simples.
+        Pra editar o texto de qualquer uma das duas, só mudar a
+        string dentro de HEADLINES.atual ou HEADLINES.nova.
+
+        Divisão automática: 50% dos visitantes veem "atual", 50% veem "nova".
+        Cada visitante sempre vê a mesma versão de novo (fica salvo no navegador dele).
+
+        Pra forçar uma versão específica (ex: pra você conferir as duas
+        sem precisar limpar o navegador), abra o link com ?headline=atual
+        ou ?headline=nova no final da URL.
+      -->
+      <script>
+        (function () {
+          var HEADLINES = {
+            atual: "Você não precisa de mais uma estratégia cara e demorada — use o <span class=\"highlight\">método de 22 horas</span> para fazer sua primeira venda",
+            nova: "Primeira Venda com IA em 22 Horas: o <span class=\"highlight\">Micro-Serviço que abre a porta</span> pra um Ecossistema inteiro de renda — mesmo começando do zero hoje"
+          };
+          var STORAGE_KEY = "eco_ab_headline";
+          var el = document.getElementById("js-headline");
+          if (!el) return;
+
+          var params = new URLSearchParams(window.location.search);
+          var forced = params.get("headline");
+
+          var variant = (forced && HEADLINES[forced]) ? forced : localStorage.getItem(STORAGE_KEY);
+          if (!variant || !HEADLINES[variant]) {
+            variant = Math.random() < 0.5 ? "atual" : "nova";
+          }
+          localStorage.setItem(STORAGE_KEY, variant);
+
+          el.innerHTML = HEADLINES[variant];
+        })();
+      </script>
+      <!-- ▲▲▲ FIM DO TESTE A/B DA HEADLINE ▲▲▲ -->
 
       <div class="subtitle-wrapper">
         <div class="subtitle-bar">
-          <p class="subtitle">Em dezembro eu fiz R$12 mil de lucro com uma estratégia online simples, depois disso fiz +700 mil até hoje 12 de julho mas foca em fazer 10k primeiro, vou mostrar nesse vídeo a base pra chegar nesse valor aproveitando a demanda reprimida de IA que a maioria ainda não viu.</p>
+          <p class="subtitle">Sua primeira venda pode sair em menos de 22 horas — e isso é só a porta de entrada pra um Ecossistema de IA Lucrativo. Assiste o vídeo até o fim pra entender como.</p>
         </div>
       </div>
 
@@ -67,7 +102,155 @@
   <hr class="divider esconder" />
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 2 — Prova Social
+       SEÇÃO 2 — Ruptura de Crença
+  ══════════════════════════════════════════ -->
+  <section class="bonuses esconder">
+    <div class="container">
+
+      <h2 class="section-title">
+        A Verdade Que <span class="highlight">Ninguém Te Conta</span>
+      </h2>
+      <p class="section-subtitle">Enquanto você tenta de tudo, a maioria comete sempre os mesmos 4 erros:</p>
+
+      <div class="bonus-list">
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ef4444;">❌</span>
+          <div class="bonus-content">
+            <h3>Vender produto avulso sem estrutura</h3>
+            <p>Você vende uma coisa isolada e, quando esgota, precisa começar do zero de novo.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ef4444;">❌</span>
+          <div class="bonus-content">
+            <h3>Copiar criativo sem entender o mecanismo</h3>
+            <p>Copia o anúncio de outra pessoa sem saber por que ele funciona — e ele para de funcionar do nada.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ef4444;">❌</span>
+          <div class="bonus-content">
+            <h3>Depender só de tráfego pago sem ecossistema</h3>
+            <p>Se a conta de anúncio cai ou o custo sobe, a sua renda cai junto — porque não existe mais nada por trás.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ef4444;">❌</span>
+          <div class="bonus-content">
+            <h3>Testar 10 nichos diferentes sem validação</h3>
+            <p>Gasta meses pulando de nicho em nicho sem nunca validar de verdade se existe demanda.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider esconder" />
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 3 — Método: 22H (vitória rápida) + Ecossistema
+  ══════════════════════════════════════════ -->
+  <section class="bonuses esconder">
+    <div class="container">
+
+      <h2 class="section-title">
+        22 Horas é Só o Começo. <span class="highlight">Veja o Resto do Caminho.</span>
+      </h2>
+      <p class="section-subtitle">Você não precisa de experiência, equipamento ou habilidade técnica. O método te guia passo a passo:</p>
+
+      <div class="bonus-list">
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ea580c;">Passo 1</span>
+          <div class="bonus-content">
+            <h3>Assiste às aulas e valida seu primeiro micro-serviço</h3>
+            <p>Aulas curtas e diretas mostram exatamente qual micro-serviço criar e como configurar tudo — sem câmera, sem aparecer, sem enrolação.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ea580c;">Passo 2</span>
+          <div class="bonus-content">
+            <h3>Monta a estrutura pra vender esse micro-serviço</h3>
+            <p>O método mostra onde e como anunciar pra quem já está procurando isso — você não precisa convencer ninguém, só colocar no ar.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ea580c;">Passo 3</span>
+          <div class="bonus-content">
+            <h3>Recebe sua primeira venda em menos de 22 horas</h3>
+            <p>Essa é a prova rápida de que o método funciona — o investimento se paga sozinho na primeira transação.</p>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge" style="background:#ea580c;">Passo 4</span>
+          <div class="bonus-content">
+            <h3>Descobre que essa primeira venda é só o "Step 1"</h3>
+            <p>Esse micro-serviço validado abre a porta pra um Ecossistema de IA Lucrativo inteiro — outros micro-serviços pra vender pra quem já comprou de você.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider esconder" />
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 4 — Benefícios (o que você vai dominar)
+  ══════════════════════════════════════════ -->
+  <section class="bonuses esconder">
+    <div class="container">
+
+      <h2 class="section-title">
+        O Que Você Vai <span class="highlight">Dominar</span>
+      </h2>
+
+      <div class="bonus-list">
+
+        <div class="bonus-card">
+          <span class="bonus-badge">1</span>
+          <div class="bonus-content">
+            <h3>Como montar a estrutura pra vender o micro-serviço validado</h3>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge">2</span>
+          <div class="bonus-content">
+            <h3>Como usar esse primeiro serviço pra abrir venda de outros micro-serviços</h3>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge">3</span>
+          <div class="bonus-content">
+            <h3>Como validar demanda antes de gastar em tráfego</h3>
+          </div>
+        </div>
+
+        <div class="bonus-card">
+          <span class="bonus-badge">4</span>
+          <div class="bonus-content">
+            <h3>Como escalar sem precisar aparecer</h3>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider esconder" />
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 5 — Prova Social (não alterado, só reposicionado)
   ══════════════════════════════════════════ -->
   <section class="social-proof esconder">
     <div class="container">
@@ -97,169 +280,7 @@
   <hr class="divider esconder" />
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 2.5 — Como Funciona
-  ══════════════════════════════════════════ -->
-  <section class="bonuses esconder">
-    <div class="container">
-
-      <h2 class="section-title">
-        É Simples. <span class="highlight">Veja Como Funciona.</span>
-      </h2>
-      <p class="section-subtitle">Você não precisa de experiência, equipamento ou habilidade técnica. O curso te guia passo a passo:</p>
-
-      <div class="bonus-list">
-
-        <div class="bonus-card">
-          <span class="bonus-badge" style="background:#ea580c;">Passo 1</span>
-          <div class="bonus-content">
-            <h3>Assiste às aulas e aprende a gerar as fotos</h3>
-            <p>Video aulas curtas e diretas mostram exatamente quais ferramentas usar e como configurar tudo. Em poucas horas você já consegue gerar fotos realistas que as pessoas pagam para ter — sem precisar de câmera, sem saber editar, sem aparecer.</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge" style="background:#ea580c;">Passo 2</span>
-          <div class="bonus-content">
-            <h3>Configura sua campanha seguindo o método</h3>
-            <p>O curso mostra onde e como anunciar para pessoas que já estão procurando esse tipo de foto — você não precisa convencer ninguém. Segue o passo a passo e coloca no ar em poucas horas.</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge" style="background:#ea580c;">Passo 3</span>
-          <div class="bonus-content">
-            <h3>Recebe o primeiro pagamento em menos de 22 horas</h3>
-            <p>Com a campanha ativa, você começa a receber pedidos de pessoas que já querem comprar. A maioria dos alunos faz a primeira venda antes de completar um dia. O investimento no curso se paga sozinho na primeira transação.</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge" style="background:#ea580c;">Passo 4</span>
-          <div class="bonus-content">
-            <h3>Escala no seu ritmo com o suporte da comunidade</h3>
-            <p>Depois da primeira venda, você continua dentro do grupo de networking com alunos que já vendem todo dia. Eles compartilham o que está funcionando agora — você aprende mais rápido, erra menos e aumenta o faturamento sem precisar descobrir tudo do zero.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider esconder" />
-
-  <!-- ══════════════════════════════════════════
-       SEÇÃO 3 — Bônus
-  ══════════════════════════════════════════ -->
-  <section class="bonuses esconder">
-    <div class="container">
-
-      <h2 class="section-title">
-        Tudo que Você <span class="highlight">Leva Hoje</span>
-      </h2>
-      <p class="section-subtitle">Além do curso completo, você recebe:</p>
-
-      <div class="bonus-list">
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 1</span>
-          <div class="bonus-content">
-            <h3>Acelerador de Vendas + Criativos Validados</h3>
-            <p>Templates prontos de anúncios que já convertem — só copiar e usar</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 2</span>
-          <div class="bonus-content">
-            <h3>Criativos Validados</h3>
-            <p>Banco de criativos testados nos nichos de maior demanda</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 3</span>
-          <div class="bonus-content">
-            <h3>Lucre com App e Múltiplos Produtos Sazonais</h3>
-            <p>Como criar produtos sazonais e usar o app para multiplicar os lucros</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 4</span>
-          <div class="bonus-content">
-            <h3>Aulão Gravado</h3>
-            <p>Aula especial com estratégias avançadas de venda e produção</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 5</span>
-          <div class="bonus-content">
-            <h3>Como Aumentar em 5x ou Mais o Seu Lucro</h3>
-            <p>O sistema de upsell e escala que Diego usa no próprio negócio</p>
-          </div>
-        </div>
-
-        <div class="bonus-card">
-          <span class="bonus-badge">Bônus 6</span>
-          <div class="bonus-content">
-            <h3>Grupo de Networking com Alunos que Vendem Todo Dia</h3>
-            <p>Acesso a uma comunidade ativa de alunos experientes que compartilham o que está funcionando agora — aprenda com quem já está no mercado</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider esconder" />
-
-  <!-- ══════════════════════════════════════════
-       SEÇÃO 4 — Comparativo de Valor
-  ══════════════════════════════════════════ -->
-  <section class="comparison esconder">
-    <div class="container">
-
-      <h2 class="section-title">
-        Custa Menos que Um Rodízio. <span class="highlight">Rende Mais que Seu Salário.</span>
-      </h2>
-
-      <div class="comparison-grid">
-        <div class="comparison-card comparison-card--bad">
-          <span class="comparison-emoji">🍔</span>
-          <p class="comparison-label">Um lanche</p>
-          <p class="comparison-value comparison-value--bad">~R$25,00</p>
-          <p class="comparison-desc">Você come e acabou. Não sobra nada.</p>
-        </div>
-
-        <div class="comparison-vs">VS</div>
-
-        <div class="comparison-card comparison-card--good">
-          <span class="comparison-emoji">📱</span>
-          <p class="comparison-label">Ecossistema de IA</p>
-          <p class="comparison-value comparison-value--good">12x de R$9,90</p>
-          <p class="comparison-desc">Um curso completo que pode se pagar na sua primeira venda.</p>
-        </div>
-      </div>
-
-      <div class="recovery-box">
-        <span class="recovery-check">✓</span>
-        <p class="recovery-text">
-          O curso ensina a vender para quem já tem interesse em comprar — não precisa forçar nem convencer. Com a campanha ativa, nossos alunos fazem a <strong>primeira venda em menos de 22 horas</strong>. O investimento se paga sozinho antes do fim do dia.
-        </p>
-      </div>
-
-      <p class="recovery-bridge">
-        E não é só teoria. Olha o que os alunos que já passaram por isso estão fazendo:
-      </p>
-
-    </div>
-  </section>
-
-  <hr class="divider esconder" />
-
-  <!-- ══════════════════════════════════════════
-       SEÇÃO 5 — Depoimentos em Vídeo
+       SEÇÃO 5.1 — Depoimentos em Vídeo (não alterado, só reposicionado)
        Clique abre o vídeo na própria página (modal)
   ══════════════════════════════════════════ -->
   <section class="testimonials esconder">
@@ -399,7 +420,77 @@
   <hr class="divider esconder" />
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 6 — CTA / Oferta
+       SEÇÃO 6 — Bônus (gancho de hoje)
+  ══════════════════════════════════════════ -->
+  <section class="bonuses esconder">
+    <div class="container">
+
+      <h2 class="section-title">
+        Pra Quem Entrar <span class="highlight">Hoje</span>
+      </h2>
+
+      <div class="bonus-list">
+
+        <div class="bonus-card">
+          <span class="bonus-badge">Bônus de Hoje</span>
+          <div class="bonus-content">
+            <h3>Nicho + Micro-Serviço Já Validado</h3>
+            <p>Eu libero um nicho e um micro-serviço que eu já validei — você não precisa descobrir isso sozinho nem gastar tempo testando.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider esconder" />
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 7 — Comparativo de Valor (leva à oferta)
+  ══════════════════════════════════════════ -->
+  <section class="comparison esconder">
+    <div class="container">
+
+      <h2 class="section-title">
+        Custa Menos que Um Rodízio. <span class="highlight">Rende Mais que Seu Salário.</span>
+      </h2>
+
+      <div class="comparison-grid">
+        <div class="comparison-card comparison-card--bad">
+          <span class="comparison-emoji">🍔</span>
+          <p class="comparison-label">Um lanche</p>
+          <p class="comparison-value comparison-value--bad">~R$25,00</p>
+          <p class="comparison-desc">Você come e acabou. Não sobra nada.</p>
+        </div>
+
+        <div class="comparison-vs">VS</div>
+
+        <div class="comparison-card comparison-card--good">
+          <span class="comparison-emoji">📱</span>
+          <p class="comparison-label">Ecossistema de IA</p>
+          <p class="comparison-value comparison-value--good">12x de R$9,90</p>
+          <p class="comparison-desc">Um ecossistema que abre a porta pra mais de um jeito de ganhar dinheiro.</p>
+        </div>
+      </div>
+
+      <div class="recovery-box">
+        <span class="recovery-check">✓</span>
+        <p class="recovery-text">
+          O micro-serviço validado se vende por mais do que o investimento inteiro custa. Com a campanha ativa, nossos alunos fazem a <strong>primeira venda em menos de 22 horas</strong>. O investimento se paga sozinho antes do fim do dia — e é aí que o Ecossistema começa a se abrir.
+        </p>
+      </div>
+
+      <p class="recovery-bridge">
+        E não é só teoria. Olha o que os alunos que já passaram por isso estão fazendo:
+      </p>
+
+    </div>
+  </section>
+
+  <hr class="divider esconder" />
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 8 — Oferta + Garantia + CTA Final
   ══════════════════════════════════════════ -->
   <section class="cta-section esconder" id="oferta">
     <div class="container">
@@ -412,7 +503,7 @@
       </div>
 
       <div class="cta-offer-box">
-        <p class="cta-offer-title">Tudo Que Eu Usei Para Faturar Meus Primeiros 10k, como criar e vender micro serviços de IA online</p>
+        <p class="cta-offer-title">Primeira Venda com IA em 22 Horas + Acesso ao Ecossistema de IA Lucrativo</p>
 
         <p class="cta-price-old">De R$497,00</p>
         <p class="cta-price-label">Por apenas</p>
@@ -423,10 +514,14 @@
         </div>
 
         <a href="https://pay.kirvano.com/35302e43-253c-415a-9967-c70ea281f885" class="cta-btn">
-          QUERO APROVEITAR O DESCONTO DE LANÇAMENTO
-          <span class="cta-btn-sub">Acesso liberado em 2 minutos • Pagamento 100% seguro</span>
+          QUERO MINHA PRIMEIRA VENDA EM 22 HORAS
+          <span class="cta-btn-sub">22 horas pra vender + acesso ao Ecossistema + bônus de hoje • Acesso liberado em 2 minutos</span>
         </a>
 
+        <p class="guarantee">
+          <span class="guarantee-icon">🛡</span>
+          Garantia incondicional de 7 dias: se não gostar, devolvemos cada centavo. O risco é todo meu — você só tem a ganhar.
+        </p>
       </div>
 
     </div>
