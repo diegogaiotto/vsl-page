@@ -10,51 +10,14 @@
 <body>
 
   <!-- ══════════════════════════════════════════
-       SEÇÃO 1 — Headline (teste A/B) + Vídeo
+       SEÇÃO 1 — Headline + Vídeo
   ══════════════════════════════════════════ -->
   <section class="hero">
     <div class="container">
 
-      <h1 class="headline" id="js-headline">
+      <h1 class="headline">
         Primeira Venda com IA em 22 Horas: o <span class="highlight">Micro-Serviço que abre a porta</span> pra um Ecossistema inteiro de renda — mesmo começando do zero hoje
       </h1>
-
-      <!--
-        ▼▼▼ TESTE A/B DA HEADLINE ▼▼▼
-        As duas versões ficam aqui, isoladas, em texto simples.
-        Pra editar o texto de qualquer uma das duas, só mudar a
-        string dentro de HEADLINES.atual ou HEADLINES.nova.
-
-        Divisão automática: 50% dos visitantes veem "atual", 50% veem "nova".
-        Cada visitante sempre vê a mesma versão de novo (fica salvo no navegador dele).
-
-        Pra forçar uma versão específica (ex: pra você conferir as duas
-        sem precisar limpar o navegador), abra o link com ?headline=atual
-        ou ?headline=nova no final da URL.
-      -->
-      <script>
-        (function () {
-          var HEADLINES = {
-            atual: "Descubra o método que está pagando de <span class=\"highlight\">R$550 a R$1.000 por dia</span> para pessoas comuns que usam IA de casa — sem chefe, sem diploma e sem aparecer",
-            nova: "Primeira Venda com IA em 22 Horas: o <span class=\"highlight\">Micro-Serviço que abre a porta</span> pra um Ecossistema inteiro de renda — mesmo começando do zero hoje"
-          };
-          var STORAGE_KEY = "eco_ab_headline";
-          var el = document.getElementById("js-headline");
-          if (!el) return;
-
-          var params = new URLSearchParams(window.location.search);
-          var forced = params.get("headline");
-
-          var variant = (forced && HEADLINES[forced]) ? forced : localStorage.getItem(STORAGE_KEY);
-          if (!variant || !HEADLINES[variant]) {
-            variant = Math.random() < 0.5 ? "atual" : "nova";
-          }
-          localStorage.setItem(STORAGE_KEY, variant);
-
-          el.innerHTML = HEADLINES[variant];
-        })();
-      </script>
-      <!-- ▲▲▲ FIM DO TESTE A/B DA HEADLINE ▲▲▲ -->
 
       <div class="subtitle-wrapper">
         <div class="subtitle-bar">
