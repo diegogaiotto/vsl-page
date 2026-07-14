@@ -162,6 +162,57 @@ body {
 }
 
 /* ────────────────────────────────────────────
+   ANTES E DEPOIS
+──────────────────────────────────────────── */
+.antes-depois-section {
+  margin-top: 32px;
+}
+
+.antes-depois-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.antes-depois-row {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.antes-depois-row:last-child {
+  margin-bottom: 0;
+}
+
+.antes-depois-photo {
+  aspect-ratio: 1 / 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.antes-depois-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.antes-depois-photo .placeholder-icon {
+  font-size: 1.5rem;
+  color: #444;
+}
+
+/* ────────────────────────────────────────────
    SEÇÃO 3 — Bônus
 ──────────────────────────────────────────── */
 .bonuses {
@@ -446,6 +497,54 @@ body {
   max-width: calc(50% - 7px);
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ────────────────────────────────────────────
+   CARROSSEL DE DEPOIMENTOS (prints do grupo)
+──────────────────────────────────────────── */
+.carousel-wrapper {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
+  margin-top: 8px;
+}
+
+.carousel-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  width: 150px;
+  scroll-snap-align: start;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-item .placeholder-icon {
+  font-size: 1.5rem;
+  color: #444;
 }
 
 /* ────────────────────────────────────────────
