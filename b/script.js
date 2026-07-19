@@ -1,6 +1,6 @@
-/* ── Vturb: revelar conteúdo aos 410s (6min50s) ── */
+/* ── Vturb: revelar conteúdo aos 380s (6min20s) ── */
 (function () {
-  var delaySeconds = 410;
+  var delaySeconds = 380;
   var player = document.querySelector("vturb-smartplayer");
   if (!player) return;
   player.addEventListener("player:ready", function () {
