@@ -1,11 +1,27 @@
 /* ── Vturb: revelar conteúdo aos 380s (6min20s) ── */
 (function () {
   var delaySeconds = 380;
+  var revealed = false;
+
+  function revealFallback() {
+    if (revealed) return;
+    revealed = true;
+    document.querySelectorAll(".esconder").forEach(function (el) {
+      el.classList.remove("esconder");
+    });
+  }
+
   var player = document.querySelector("vturb-smartplayer");
-  if (!player) return;
-  player.addEventListener("player:ready", function () {
-    player.displayHiddenElements(delaySeconds, [".esconder"], { persist: true });
-  });
+  if (player) {
+    player.addEventListener("player:ready", function () {
+      revealed = true;
+      player.displayHiddenElements(delaySeconds, [".esconder"], { persist: true });
+    });
+  }
+
+  /* Plano B: garante que o botão aparece mesmo se o player não avisar
+     que está pronto (bloqueador de anúncio, script lento, etc). */
+  setTimeout(revealFallback, (delaySeconds + 5) * 1000);
 })();
 
 /* ── Countdown timer da oferta ── */
