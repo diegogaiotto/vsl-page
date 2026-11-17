@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="+ de 10 mil dólares de lucro em menos de 30 dias com 1 oferta, 1 demanda reprimida e apenas 1 criativo." />
+  <title>Dólar Automático com IA — Diego Ferreira</title>
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
+  <style>
+    /* Paleta tirada da cédula de dólar */
+    :root {
+      --papel: #E9ECDD;      /* papel-moeda */
+      --papel-2: #DCE2CC;    /* papel com sombra */
+      --tinta: #15211A;      /* tinta de impressão */
+      --nota: #234A35;       /* verde do verso da nota */
+      --selo: #2F7D4F;       /* selo do Tesouro */
+      --linha: #A9B596;      /* gravura / fios */
+      --muted: #4C5B50;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: "Archivo", system-ui, sans-serif;
+      font-stretch: 100%;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--selo); outline-offset: 3px; }
+
+    .wrap { max-width: 620px; margin: 0 auto; padding: 0 16px; }
+
+    /* ── Hero: a "cédula" ── */
+    .hero { padding: 28px 0 40px; }
+    .note {
+      position: relative;
+      background: var(--papel);
+      border: 2px solid var(--nota);
+      outline: 1px solid var(--nota);
+      outline-offset: -8px;
+      padding: 30px 22px 26px;
+      text-align: center;
+      overflow: hidden;
+    }
+    /* guilhoché: linhas onduladas de gravura no fundo da nota */
+    .note::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24' viewBox='0 0 120 24'%3E%3Cpath d='M0 12 Q15 0 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23234A35' stroke-width='.6' opacity='.22'/%3E%3Cpath d='M0 12 Q15 24 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23234A35' stroke-width='.6' opacity='.22'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .note > * { position: relative; }
+    .note-top {
+      font-stretch: 125%;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--nota);
+      margin-bottom: 18px;
+    }
+    .headline {
+      font-stretch: 112%;
+      font-weight: 850;
+      font-size: clamp(28px, 7.4vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -.01em;
+      color: var(--tinta);
+    }
+
+    /* os três "1" — cantos de uma nota de 1 dólar */
+    .ones {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 26px 0 6px;
+    }
+    .one { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .one-num {
+      width: 84px; height: 84px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      border: 2px solid var(--nota);
+      box-shadow: inset 0 0 0 5px var(--papel), inset 0 0 0 6px var(--nota);
+      background: radial-gradient(circle, var(--papel) 54%, var(--papel-2) 55%, var(--papel) 70%);
+      font-stretch: 62%;
+      font-weight: 900;
+      font-size: 60px;
+      line-height: 1;
+      color: var(--nota);
+    }
+    .one-label { font-weight: 700; font-size: 15px; line-height: 1.25; }
+
+    .sub {
+      max-width: 46ch;
+      margin: 22px auto 26px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .video { max-width: 400px; margin: 0 auto; }
+
+    /* ── Conteúdo liberado aos 7min50s ── */
+    .esconder { display: none; }
+
+    .jump {
+      display: block;
+      margin: 22px auto 0;
+      max-width: 400px;
+      text-align: center;
+      background: var(--selo);
+      color: var(--papel);
+      text-decoration: none;
+      font-weight: 800;
+      font-stretch: 110%;
+      padding: 15px 18px;
+      border-radius: 4px;
+    }
+
+    section.block { padding: 44px 0; border-top: 1px solid var(--linha); }
+    h2 {
+      font-stretch: 112%;
+      font-weight: 850;
+      font-size: clamp(24px, 5.6vw, 32px);
+      line-height: 1.12;
+      margin-bottom: 14px;
+    }
+    h3 { font-weight: 800; font-size: 18px; line-height: 1.3; margin-bottom: 4px; }
+    p + p { margin-top: 12px; }
+    .lead { color: var(--muted); max-width: 60ch; }
+
+    /* Abas */
+    .tabs {
+      display: flex;
+      border: 2px solid var(--nota);
+      border-radius: 4px;
+      margin-bottom: 34px;
+      position: sticky; top: 8px; z-index: 5;
+      background: var(--papel);
+    }
+    .tab {
+      flex: 1;
+      font: inherit;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 12px 8px;
+      border: 0;
+      background: transparent;
+      color: var(--nota);
+      cursor: pointer;
+    }
+    .tab[aria-selected="true"] { background: var(--nota); color: var(--papel); }
+    .panel[hidden] { display: none; }
+    .panel > * + * { margin-top: 0; }
+
+    /* Problemas: lista corrida, sem cartões */
+    .wrong { list-style: none; margin-top: 18px; }
+    .wrong li { padding: 14px 0; border-bottom: 1px dashed var(--linha); }
+    .wrong li:first-child { border-top: 1px dashed var(--linha); }
+    .wrong h3 { text-decoration: line-through; text-decoration-color: #A23B2A; text-decoration-thickness: 2px; }
+    .wrong p { color: var(--muted); }
+
+    /* Real x dólar: câmbio */
+    .rate {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      text-align: center;
+    }
+    .rate-side { padding: 16px 8px; }
+    .rate-num { display: block; font-stretch: 62%; font-weight: 900; font-size: 54px; line-height: 1; }
+    .rate-side--brl .rate-num { color: var(--muted); }
+    .rate-side--usd { background: var(--nota); color: var(--papel); border-radius: 4px; }
+    .rate-eq { font-weight: 900; font-size: 28px; color: var(--nota); }
+    .rate-cap { display: block; font-size: 14px; margin-top: 6px; }
+
+    /* Passos: é uma sequência de verdade, então numerada */
+    .steps { list-style: none; counter-reset: s; margin-top: 22px; }
+    .steps li {
+      counter-increment: s;
+      position: relative;
+      padding: 0 0 22px 56px;
+    }
+    .steps li::before {
+      content: counter(s);
+      position: absolute; left: 0; top: -4px;
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
+      border: 2px solid var(--nota);
+      border-radius: 50%;
+      font-stretch: 62%;
+      font-weight: 900;
+      font-size: 24px;
+      color: var(--nota);
+      background: var(--papel);
+    }
+    .steps li::after {
+      content: "";
+      position: absolute; left: 18px; top: 36px; bottom: 0;
+      border-left: 2px dotted var(--linha);
+    }
+    .steps li:last-child::after { display: none; }
+    .steps p { color: var(--muted); }
+
+    .countries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .countries span {
+      border: 1.5px solid var(--nota);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-weight: 700;
+    }
+    .note-small { color: var(--muted); font-size: 15px; margin-top: 12px; }
+
+    /* Alunos: depoimentos, não cartões */
+    .quotes { margin-top: 18px; }
+    .quote { padding: 18px 0; border-bottom: 1px dashed var(--linha); }
+    .quote p { font-size: 18px; line-height: 1.45; }
+    .quote footer { margin-top: 8px; color: var(--muted); font-size: 15px; }
+    .quote footer strong { color: var(--tinta); }
+
+    /* Mentor */
+    .path { list-style: none; margin: 22px 0; }
+    .path li { display: grid; grid-template-columns: 104px 1fr; gap: 14px; padding: 14px 0; border-top: 1px dashed var(--linha); }
+    .path li:last-child { border-bottom: 1px dashed var(--linha); }
+    .path-when { font-weight: 800; color: var(--selo); font-size: 15px; }
+    .path p { color: var(--muted); font-size: 16px; }
+    .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+    .figure { border-left: 3px solid var(--selo); padding-left: 12px; }
+    .figure strong { display: block; font-stretch: 80%; font-weight: 900; font-size: 30px; line-height: 1.1; color: var(--nota); }
+    .figure span { font-size: 14px; color: var(--muted); }
+    .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+    .photos--2 { grid-template-columns: repeat(2, 1fr); }
+    .photos img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: saturate(.85); }
+    .photo-cap { font-weight: 700; margin-top: 22px; }
+
+    /* Bônus: "o que vem dentro" */
+    .inside { list-style: none; margin-top: 18px; }
+    .inside li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 0; border-bottom: 1px dashed var(--linha); }
+    .inside li::before { content: "✓"; font-weight: 900; color: var(--selo); font-size: 20px; line-height: 1.3; }
+    .inside p { color: var(--muted); }
+    .inside .value { display: block; margin-top: 4px; font-weight: 700; color: var(--selo); font-size: 15px; }
+
+    /* Oferta: a nota com o selo carimbado */
+    .offer { padding: 44px 0 56px; border-top: 1px solid var(--linha); }
+    .offer .note { padding: 34px 22px 28px; }
+    .seal {
+      position: absolute; top: 14px; right: 14px;
+      width: 74px; height: 74px;
+      border-radius: 50%;
+      border: 2px solid var(--selo);
+      box-shadow: inset 0 0 0 4px var(--papel), inset 0 0 0 5px var(--selo);
+      display: grid; place-items: center;
+      text-align: center;
+      color: var(--selo);
+      font-weight: 900;
+      font-size: 11px;
+      line-height: 1.1;
+      transform: rotate(-12deg);
+    }
+    .offer-title { font-stretch: 112%; font-weight: 850; font-size: 22px; line-height: 1.15; margin: 0 70px 18px; }
+    .was { color: var(--muted); text-decoration: line-through; }
+    .price { margin: 10px 0 4px; }
+    .price-big { display: block; font-stretch: 70%; font-weight: 900; font-size: 64px; line-height: 1; color: var(--nota); }
+    .price-small { font-size: 16px; color: var(--muted); }
+    .buy {
+      display: block;
+      margin: 22px 0 14px;
+      background: var(--selo);
+      color: var(--papel);
+      text-decoration: none;
+      font-weight: 900;
+      font-stretch: 112%;
+      font-size: 19px;
+      padding: 18px 16px;
+      border-radius: 4px;
+    }
+    .buy:hover { background: var(--nota); }
+    .buy small { display: block; font-weight: 500; font-stretch: 100%; font-size: 13px; opacity: .9; margin-top: 4px; }
+    .guarantee { font-size: 14px; color: var(--muted); max-width: 44ch; margin: 0 auto; }
+
+    /* O único movimento da página: o selo é carimbado quando a oferta aparece */
+    .offer.is-in .seal { animation: carimbo .5s cubic-bezier(.2,1.6,.4,1) both .2s; }
+    @keyframes carimbo {
+      from { transform: rotate(-12deg) scale(2.4); opacity: 0; }
+      to { transform: rotate(-12deg) scale(1); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .offer.is-in .seal { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    .site-footer { background: var(--nota); color: var(--papel-2); font-size: 13px; padding: 24px 0; text-align: center; }
+
+    @media (max-width: 380px) {
+      .one-num { width: 70px; height: 70px; font-size: 48px; }
+      .one-label { font-size: 13px; }
+      .path li { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero: headline + fórmula 1-1-1 + vídeo (sempre visível) -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="note">
+        <p class="note-top">Dólar Automático com IA</p>
+        <h1 class="headline">+ de 10 mil dólares de lucro em menos de 30 dias</h1>
+
+        <div class="ones" aria-label="com 1 oferta, 1 demanda reprimida e apenas 1 criativo">
+          <div class="one"><span class="one-num" aria-hidden="true">1</span><span class="one-label">oferta</span></div>
+          <div class="one"><span class="one-num" aria-hidden="true">1</span><span class="one-label">demanda reprimida</span></div>
+          <div class="one"><span class="one-num" aria-hidden="true">1</span><span class="one-label">criativo</span></div>
+        </div>
+      </div>
+
+      <p class="sub">Vendendo em dólar pra outros países, no automático, sem aparecer e sem sair de casa. Assista ao vídeo até o fim pra entender como.</p>
+
+      <div class="video">
+        <vturb-smartplayer id="vid-6af48c2f49fa01f70b9d2094" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.91666666666666% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
+        <script type="text/javascript">
+          var s=document.createElement("script");
+          s.src="https://scripts.converteai.net/6fde4800-0bbd-4e3d-8fdc-f037e8202187/players/6af48c2f49fa01f70b9d2094/v4/player.js", s.async=!0,document.head.appendChild(s);
+        </script>
+      </div>
+
+      <a href="#oferta" class="jump esconder">Ver a oferta</a>
+    </div>
+  </header>
+
+  <!-- Abas — liberadas aos 7min50s -->
+  <main class="esconder">
+    <section class="block">
+      <div class="wrap">
+
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" id="tab-metodo" aria-controls="painel-metodo" aria-selected="true">O método</button>
+          <button class="tab" role="tab" id="tab-mentor" aria-controls="painel-mentor" aria-selected="false">Quem é seu mentor</button>
+        </div>
+
+        <!-- Aba 1: O método -->
+        <div class="panel" id="painel-metodo" role="tabpanel" aria-labelledby="tab-metodo">
+
+          <h2>O loop infinito do digital</h2>
+          <p class="lead">A maioria fica presa testando o que funcionava no passado e hoje está saturado.</p>
+          <ul class="wrong">
+            <li><h3>Testar produto atrás de produto</h3><p>Sempre na esperança de um dar certo, e quase sempre no prejuízo.</p></li>
+            <li><h3>Vender só no Brasil</h3><p>Mercado saturado, cheio de golpe, e em real, uma moeda fraca.</p></li>
+            <li><h3>Achar que é só trabalhar mais</h3><p>Passar o dia no computador não traz resultado. Estratégia traz.</p></li>
+          </ul>
+
+          <section class="block" style="margin-top:40px">
+            <h2>A saída é a demanda reprimida</h2>
+            <p class="lead">É um público que já está aquecido e já quer comprar um produto. Você só se posiciona pra vender pra ele, no automático, de qualquer lugar.</p>
+            <div class="rate">
+              <div class="rate-side rate-side--usd"><span class="rate-num">US$ 1</span><span class="rate-cap">países inexplorados</span></div>
+              <span class="rate-eq" aria-hidden="true">≈</span>
+              <div class="rate-side rate-side--brl"><span class="rate-num">R$ 5</span><span class="rate-cap">no seu bolso</span></div>
+            </div>
+          </section>
+
+          <section class="block">
+            <h2>Como a venda automática acontece</h2>
+            <ol class="steps">
+              <li><h3>Você encontra 1 demanda reprimida</h3><p>Com um método baseado no que está acontecendo no mercado, não no achismo.</p></li>
+              <li><h3>Escolhe 1 oferta que casa com ela</h3><p>A gente ensina como escolher o produto certo.</p></li>
+              <li><h3>Sobe 1 criativo validado</h3><p>Tirado do nosso banco de criativos, baseado no que já vende.</p></li>
+              <li><h3>O robô atende e vende</h3><p>As mensagens chegam no funil, o robô responde e o pagamento cai em dólar, no Pix, PayPal, Stripe ou Hotmart.</p></li>
+            </ol>
+          </section>
+
+          <section class="block">
+            <h2>Alguns dos países que mais vendem</h2>
+            <div class="countries"><span>Costa Rica</span><span>Itália</span><span>França</span><span>Portugal</span></div>
+            <p class="note-small">Compras saindo por até US$ 0,33 no gerenciador, e vendas no mundo todo.</p>
+          </section>
+
+          <section class="block">
+            <h2>Quem já está fazendo</h2>
+            <div class="quotes">
+              <blockquote class="quote">
+                <p>Recebeu a estrutura validada, ajustou as campanhas e estava vendendo desde o segundo dia de operação.</p>
+                <footer><strong>Lucas</strong>, aluno do Dólar Automático</footer>
+              </blockquote>
+              <blockquote class="quote">
+                <p>Começou a rodar em 28 de julho e em menos de uma semana já tinha vendas no Pix, Stripe, PayPal e Hotmart, incluindo um Pix de R$ 500 no segundo dia.</p>
+                <footer><strong>Patrick</strong>, aluno da mentoria</footer>
+              </blockquote>
+              <blockquote class="quote">
+                <p>Faturou os primeiros R$ 10 mil em 17 dias e recebeu a premiação da Hotmart.</p>
+                <footer><strong>David</strong>, premiado pela Hotmart</footer>
+              </blockquote>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Aba 2: Quem é seu mentor -->
+        <div class="panel" id="painel-mentor" role="tabpanel" aria-labelledby="tab-mentor" hidden>
+
+          <h2>Prazer, eu sou o Diego Ferreira</h2>
+          <p class="lead">Há um ano e meio eu era CLT, com um salário só, no interior de São Paulo. Testava produto atrás de produto, fazia uma venda aqui e outra ali, mas nada que me tirasse do CLT.</p>
+
+          <ul class="path">
+            <li><span class="path-when">De onde vim</span><div><h3>CLT, interior de SP</h3><p>Trabalhava sem parar e não conseguia uma renda previsível.</p></div></li>
+            <li><span class="path-when">A virada</span><div><h3>Parei de trabalhar mais e comecei a pensar em estratégia</h3><p>Foquei em demandas reprimidas e passei a vender em dólar, no automático.</p></div></li>
+            <li><span class="path-when">Onde cheguei</span><div><h3>Vivo do digital em Florianópolis</h3><p>Trabalho de casa com vista pro mar, e a operação continua rodando quando eu vou pra praia.</p></div></li>
+          </ul>
+
+          <div class="figures">
+            <div class="figure"><strong>+R$ 50 mil</strong><span>de lucro em 3 meses em uma conta de anúncio</span></div>
+            <div class="figure"><strong>US$ 3.000</strong><span>em 3 meses, com uma única oferta</span></div>
+          </div>
+
+          <p class="lead">Hoje eu dou uma mentoria individual de R$ 10.000 ensinando essa estratégia, e foi ela que eu transformei no curso gravado abaixo.</p>
+
+          <p class="photo-cap">Antes, no interior de SP</p>
+          <div class="photos photos--2">
+            <img src="../images/antes-1.jpg" alt="Diego antes, no interior de SP" />
+            <img src="../images/antes-2.jpg" alt="Diego antes, no interior de SP" />
+          </div>
+          <p class="photo-cap">Hoje, em Florianópolis</p>
+          <div class="photos">
+            <img src="../images/depois-1.jpg" alt="Diego hoje, em Florianópolis" />
+            <img src="../images/depois-2.jpg" alt="Diego hoje, em Florianópolis" />
+            <img src="../images/depois-3.jpg" alt="Diego hoje, em Florianópolis" />
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Bônus -->
+    <section class="block">
+      <div class="wrap">
+        <h2>O que vem junto com o curso</h2>
+        <ul class="inside">
+          <li><div><h3>Fluxo de atendimento validado</h3><p>O mesmo funil com robô que eu uso. Você copia e coloca pra rodar com um clique.</p></div></li>
+          <li><div><h3>O modelo de IA que sobe as minhas campanhas</h3><p>A mesma IA que eu uso pra subir os anúncios da operação.</p></div></li>
+          <li><div><h3>Suporte comigo e com a minha equipe</h3><p>Acesso ao meu número. A gente analisa o seu criativo antes de você subir, pra você não torrar dinheiro.</p></div></li>
+          <li><div><h3>Grupo VIP de networking</h3><p>Pessoas que vendem no digital trocando dicas e fechando parcerias.</p><span class="value">Vendido a R$ 200, grátis no lançamento</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Oferta -->
+    <section class="offer" id="oferta">
+      <div class="wrap">
+        <div class="note">
+          <span class="seal" aria-hidden="true">PREÇO DE<br/>LANÇA-<br/>MENTO</span>
+          <p class="offer-title">Dólar Automático com IA, curso gravado e 4 bônus</p>
+          <p class="was">Mentoria individual: R$ 10.000</p>
+          <p class="price"><span class="price-big">12x R$ 9,90</span><span class="price-small">ou R$ 97 à vista</span></p>
+          <a href="https://pay.kirvano.com/c48e32d5-9527-49c5-bbaa-27e4a9c68970" class="buy">
+            Comprar o curso por R$ 97
+            <small>Acesso liberado logo após o pagamento</small>
+          </a>
+          <p class="guarantee">Garantia incondicional de 7 dias. Se não gostar, você pede o reembolso e recebe cada centavo de volta.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© 2026 Diego Ferreira. Todos os direitos reservados.</p>
+      <p>Este site não é afiliado ao Facebook, Instagram ou Google.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* Revela abas, bônus e oferta aos 470s (7min50s) */
+    (function () {
+      var delaySeconds = 470;
+      var revealed = false;
+
+      function markOffer() {
+        var offer = document.getElementById("oferta");
+        if (!offer || !("IntersectionObserver" in window)) return;
+        var io = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) { offer.classList.add("is-in"); io.disconnect(); }
+        }, { threshold: .4 });
+        io.observe(offer);
+      }
+
+      function reveal() {
+        if (revealed) return;
+        revealed = true;
+        document.querySelectorAll(".esconder").forEach(function (el) { el.classList.remove("esconder"); });
+        markOffer();
+      }
+
+      /* Prévia local: mostra tudo de uma vez */
+      if (location.hostname === "localhost" || location.protocol === "file:") { reveal(); return; }
+
+      var player = document.querySelector("vturb-smartplayer");
+      if (player) {
+        player.addEventListener("player:ready", function () {
+          revealed = true;
+          player.displayHiddenElements(delaySeconds, [".esconder"], { persist: true });
+          markOffer();
+        });
+      }
+
+      /* Plano B: garante que o botão aparece mesmo se o player não avisar */
+      setTimeout(reveal, (delaySeconds + 5) * 1000);
+    })();
+
+    /* Abas */
+    (function () {
+      var tabs = document.querySelectorAll(".tab");
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t) {
+            var on = t === tab;
+            t.setAttribute("aria-selected", on ? "true" : "false");
+            document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+          });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
