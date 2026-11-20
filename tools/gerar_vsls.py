@@ -211,7 +211,23 @@ PAGES = {
   ),
 }
 
-def build(key, p, vid, delay):
+def pixel(pid):
+    if not pid:
+        return ""
+    return """<!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '%s');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=%s&ev=PageView&noscript=1" /></noscript>
+  """ % (pid, pid)
+
+def build(key, p, vid, delay, px=None):
     ones = "\n".join('          <div class="stat"><span class="stat-num">%s</span><span class="one-label">%s</span></div>' % (n, l) for n, l in p["ones"])
     bonus = "\n".join('          <li><div><h3>%s</h3><p>%s</p>%s</div></li>' % (h, d, '<span class="value">%s</span>' % v if v else "") for h, d, v in p["bonus"])
     ladder = ('<ul class="ladder">%s</ul>' % "".join("<li>%s</li>" % x for x in p["ladder"])) if p["ladder"] else ""
@@ -227,7 +243,7 @@ def build(key, p, vid, delay):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
-  {css}
+  {pixel(px)}{css}
 </head>
 <body>
 
@@ -367,6 +383,6 @@ for k, p in PAGES.items():
     c = cfg.get(k, {})
     if c.get("checkout"): p["checkout"] = c["checkout"]
     vid = (c["acc"], c["pid"]) if c.get("pid") else None
-    out = build(k, p, vid, DELAY[k])
+    out = build(k, p, vid, DELAY[k], c.get("pixel"))
     open(sys.argv[3] + "/" + k + "/index.html", "w").write(out)
     print(k, len(out))
