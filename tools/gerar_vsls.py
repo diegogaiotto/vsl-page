@@ -114,12 +114,11 @@ PAGES = {
     top="Dólar Automático com IA",
     headline="Como eu vendo em dólar pra fora do Brasil, no automático, de casa",
     sub="Sem aparecer, sem falar com cliente e começando com pouco. No vídeo eu abro a minha tela, mostro as vendas caindo em dólar na Hotmart e os resultados dos alunos. Assista até o fim.",
-    ones=[("R$ 176 mil", "em 3 meses"), ("US$ 500", "num dia bom"), ("0", "conversas manuais")],
+    ones=[("US$ · €", "moedas que você recebe"), ("24h", "o robô atende por você"), ("0", "vezes que você aparece")],
     metodo="""
           <h2>Por que vender em dólar</h2>
           <p class="lead">O Brasil está saturado e o real é fraco. Lá fora tem gente querendo comprar e cada venda vale 5 a 6 vezes mais no seu bolso.</p>
 """ + RATE + """
-          <p class="note-small">Exemplo do vídeo: vendendo US$ 500 no dia, são uns R$ 3 mil. Investindo metade, sobra cerca de R$ 1.500 de lucro, em um único dia.</p>
 """ + COURSE_STEPS + COUNTRIES + QUOTES,
     bonus_title="O que vem junto com o curso",
     bonus=[
