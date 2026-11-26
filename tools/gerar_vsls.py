@@ -118,7 +118,7 @@ PAGES = {
     desc="Como eu vendo em dólar pra fora do Brasil, no automático, da minha casa.",
     top="Dólar Automático com IA",
     headline="Do CLT comum para vendas em dólar no automático",
-    headline_sub='Como eu fiz <strong>US$ 3.403,03</strong>, que dá <strong>R$ 20.340</strong>',
+    headline_sub='O passo a passo que eu uso para vender em dólar e em euro',
     cotacao=True,
     minimal=True,
     hero_note="✓ Sem precisar aparecer ou gravar vídeos com seu rosto",
@@ -417,11 +417,17 @@ def build(key, p, vid, delay, px=None):
 </html>
 """
 
+# Limpeza da /c para aprovação no Facebook (26/11): tira promessa de ganho e prazo, põe aviso e links legais
+LIMPA_C = [('Lá fora tem gente querendo comprar e cada venda vale 5 a 6 vezes mais no seu bolso.', 'Lá fora tem gente querendo comprar produto digital, e cada venda é paga em dólar ou euro.'), ('<span class="rate-cap">no seu bolso</span>', '<span class="rate-cap">em reais</span>'), ('Recebeu a estrutura validada, ajustou as campanhas e estava vendendo desde o segundo dia de operação.', 'Recebeu a estrutura validada, ajustou as campanhas e fez as primeiras vendas pra fora do Brasil.'), ('Começou a rodar em 28 de julho e em menos de uma semana já tinha vendas no Pix, Stripe, PayPal e Hotmart, incluindo um Pix de R$ 500 no segundo dia.', 'Colocou a operação no ar e começou a receber vendas pelo Pix, Stripe, PayPal e Hotmart.'), ('Faturou os primeiros R$ 10 mil em 17 dias e recebeu a premiação da Hotmart.', 'Fez as primeiras vendas com a estrutura e recebeu a premiação da Hotmart.'), ('            </div>\n          </section>\n\n        </div>\n\n        <div class="panel" id="painel-mentor"', '            </div>\n            <p class="disclaimer">Resultados individuais. Eles dependem da dedicação de cada pessoa e não são garantia de ganho.</p>\n          </section>\n\n        </div>\n\n        <div class="panel" id="painel-mentor"'), ('<div class="figure"><strong>R$ 176 mil</strong><span>de faturamento em 3 meses</span></div>', '<div class="figure"><strong>+5 mil</strong><span>alunos nos meus cursos</span></div>'), ('<div class="figure"><strong>R$ 4.300</strong><span>de lucro em um único dia (recorde)</span></div>', '<div class="figure"><strong>7 dias</strong><span>de garantia incondicional</span></div>'), ('<h3>Criativos prontos de uma oferta de R$ 100 mil</h3><p>Os criativos de uma oferta que já vendeu mais de US$ 20 mil.</p>', '<h3>Criativos prontos de uma oferta validada</h3><p>Os criativos de uma oferta que já está no ar e vendendo.</p>'), ('O mesmo funil automático que eu uso. Você cola, coloca pra rodar e já pode vender no segundo dia.', 'O mesmo funil automático que eu uso, pronto pra você copiar e colocar no ar.'), ('      <p>Este site não é afiliado ao Facebook, Instagram ou Google.</p>\n', '      <p>Este site não é afiliado ao Facebook, Instagram ou Google.</p>\n      <p>Os resultados mostrados são individuais e não representam garantia de ganhos. Cada resultado depende da dedicação, do esforço e das condições de cada pessoa.</p>\n      <p class="footer-links"><a href="/privacidade/">Política de Privacidade</a> · <a href="/termos/">Termos de Uso</a></p>\n'), ('  </style>', '    .disclaimer { font-size: 13px; color: var(--muted); margin-top: 14px; text-align: center; }\n    .footer-links a { text-decoration: underline; }\n  </style>')]
+
 DELAY = {"c": 568, "d": 428, "e": 553}
 for k, p in PAGES.items():
     c = cfg.get(k, {})
     if c.get("checkout"): p["checkout"] = c["checkout"]
     vid = (c["acc"], c["pid"]) if c.get("pid") else None
     out = build(k, p, vid, DELAY[k], c.get("pixel"))
+    if k == "c":
+        for x, y in LIMPA_C:
+            out = out.replace(x, y, 1)
     open(sys.argv[3] + "/" + k + "/index.html", "w").write(out)
     print(k, len(out))
