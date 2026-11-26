@@ -327,24 +327,35 @@
     .ladder { list-style: none; margin: 4px 0 6px; }
     .ladder li { color: var(--muted); text-decoration: line-through; font-size: 15px; }
     .free { display: inline-block; margin-top: 10px; font-weight: 800; color: var(--selo); }
+    /* Hero minimalista: só headline, subtítulo e vídeo */
+    .hero-min { padding: 44px 0 36px; text-align: center; }
+    .hero-min .headline { font-size: clamp(26px, 6.6vw, 38px); font-stretch: 105%; line-height: 1.12; max-width: 17ch; margin: 0 auto; }
+    .hero-min .headline-sub { font-weight: 500; font-size: clamp(16px, 4.4vw, 19px); line-height: 1.4; color: var(--muted); margin: 14px auto 26px; }
+    .hero-min .headline-sub strong { font-weight: 800; color: var(--nota); }
+
+    .hero-min .hero-note { font-size: 14px; font-weight: 600; color: var(--selo); margin: -14px 0 22px; }
+
+    /* Selo pequeno da cotação ao vivo */
+    .cot-pop { position: fixed; left: 12px; bottom: 12px; z-index: 50; display: flex; align-items: center; gap: 8px; padding: 7px 12px 7px 10px; background: #fff; color: var(--tinta); border: 1px solid var(--linha); border-radius: 999px; box-shadow: 0 4px 14px rgba(21,33,26,.12); font-size: 12.5px; line-height: 1.2; opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s; }
+    .cot-pop.on { opacity: 1; transform: none; }
+    .cot-pop[hidden] { display: none; }
+    .cot-dot { width: 7px; height: 7px; border-radius: 50%; background: #2FB463; box-shadow: 0 0 0 0 rgba(47,180,99,.6); animation: cotpulse 1.8s infinite; flex: none; }
+    @keyframes cotpulse { 70% { box-shadow: 0 0 0 7px rgba(47,180,99,0); } 100% { box-shadow: 0 0 0 0 rgba(47,180,99,0); } }
+    .cot-txt { color: var(--muted); }
+    .cot-txt b { color: var(--tinta); font-weight: 800; }
+    .cot-up { color: var(--selo); font-weight: 700; }
+    .cot-x { background: none; border: 0; color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; padding: 0 0 0 2px; }
+    @media (prefers-reduced-motion: reduce) { .cot-dot { animation: none; } .cot-pop { transition: none; } }
   </style>
 </head>
 <body>
 
-  <!-- Hero: headline + números + vídeo (sempre visível) -->
-  <header class="hero">
+  <!-- Hero: só headline, subtítulo e vídeo (sempre visível) -->
+  <header class="hero hero-min">
     <div class="wrap">
-      <div class="note">
-        <p class="note-top">Dólar Automático com IA</p>
-        <h1 class="headline">Como eu vendo em dólar pra fora do Brasil, no automático, de casa</h1>
-        <div class="stats">
-          <div class="stat"><span class="stat-num">US$ · €</span><span class="one-label">moedas que você recebe</span></div>
-          <div class="stat"><span class="stat-num">24h</span><span class="one-label">o robô atende por você</span></div>
-          <div class="stat"><span class="stat-num">0</span><span class="one-label">vezes que você aparece</span></div>
-        </div>
-      </div>
-
-      <p class="sub">Sem aparecer, sem falar com cliente e começando com pouco. No vídeo eu abro a minha tela, mostro as vendas caindo em dólar na Hotmart e os resultados dos alunos. Assista até o fim.</p>
+      <h1 class="headline">Do CLT comum para vendas em dólar no automático</h1>
+      <p class="headline-sub">Como eu fiz <strong>US$ 3.403,03</strong>, que dá <strong>R$ 20.340</strong></p>
+      <p class="hero-note">✓ Sem precisar aparecer ou gravar vídeos com seu rosto</p>
 
       <div class="video">
         <vturb-smartplayer id="vid-6afbb8f376fe16b992afae8e" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
@@ -357,6 +368,13 @@
       <a href="#oferta" class="jump esconder">Ver a oferta</a>
     </div>
   </header>
+
+  <!-- Selo pequeno: cotação do dólar ao vivo -->
+  <div class="cot-pop" id="cot-pop" role="status" aria-live="polite" hidden>
+    <span class="cot-dot" aria-hidden="true"></span>
+    <span class="cot-txt">Dólar ao vivo <b id="cot-brl">R$ 5,91</b> <span class="cot-up" id="cot-var" hidden>▲ <span id="cot-pct">19%</span> em 30 dias</span></span>
+    <button class="cot-x" type="button" aria-label="Fechar cotação" id="cot-x">×</button>
+  </div>
 
   <!-- Tudo abaixo só aparece no segundo em que o preço é falado no vídeo (568s) -->
   <main class="esconder">
@@ -522,6 +540,40 @@
 
       /* Plano B: se o player não avisar que está pronto, libera pelo relógio */
       setTimeout(reveal, (delaySeconds + 5) * 1000);
+    })();
+
+    /* Cotação do dólar ao vivo (selo pequeno no canto) */
+    (function () {
+      var pop = document.getElementById("cot-pop");
+      var brl = document.getElementById("cot-brl");
+      var varEl = document.getElementById("cot-var");
+      var pctEl = document.getElementById("cot-pct");
+      var fmt = function (v) { return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+      var mostrar = function () { pop.hidden = false; requestAnimationFrame(function () { pop.classList.add("on"); }); };
+      document.getElementById("cot-x").addEventListener("click", function () { pop.hidden = true; clearInterval(timer); });
+      fetch("https://economia.awesomeapi.com.br/json/daily/USD-BRL/40")
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var hoje = parseFloat(d[0].bid);
+          if (!hoje) return;
+          brl.textContent = fmt(hoje);
+          var alvo = parseInt(d[0].timestamp, 10) - 30 * 86400, antes = null;
+          for (var i = 0; i < d.length; i++) { if (parseInt(d[i].timestamp, 10) <= alvo) { antes = parseFloat(d[i].bid); break; } }
+          if (antes) {
+            var pct = (hoje / antes - 1) * 100;
+            if (pct >= 0.5) { pctEl.textContent = pct.toLocaleString("pt-BR", { maximumFractionDigits: pct < 10 ? 1 : 0 }) + "%"; varEl.hidden = false; }
+          }
+          setTimeout(mostrar, 1500);
+        })
+        .catch(function () { /* API fora do ar: o selo não aparece */ });
+      /* atualiza o valor a cada 60 segundos */
+      var timer = setInterval(function () {
+        if (pop.hidden) return;
+        fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL")
+          .then(function (r) { return r.json(); })
+          .then(function (d) { var v = parseFloat(d.USDBRL.bid); if (v) brl.textContent = fmt(v); })
+          .catch(function () {});
+      }, 60000);
     })();
 
     /* Abas */

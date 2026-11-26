@@ -19,6 +19,11 @@ EXTRA_CSS = """
     .free { display: inline-block; margin-top: 10px; font-weight: 800; color: var(--selo); }
 """
 
+# Cotação ao vivo do dólar (US$ 200 em reais + alta em 30 dias), só nas páginas com cotacao=True
+COTACAO_HTML = ''
+COTACAO_CSS = '    /* Hero minimalista: só headline, subtítulo e vídeo */\n    .hero-min { padding: 44px 0 36px; text-align: center; }\n    .hero-min .headline { font-size: clamp(26px, 6.6vw, 38px); font-stretch: 105%; line-height: 1.12; max-width: 17ch; margin: 0 auto; }\n    .hero-min .headline-sub { font-weight: 500; font-size: clamp(16px, 4.4vw, 19px); line-height: 1.4; color: var(--muted); margin: 14px auto 26px; }\n    .hero-min .headline-sub strong { font-weight: 800; color: var(--nota); }\n\n    .hero-min .hero-note { font-size: 14px; font-weight: 600; color: var(--selo); margin: -14px 0 22px; }\n\n    /* Selo pequeno da cotação ao vivo */\n    .cot-pop { position: fixed; left: 12px; bottom: 12px; z-index: 50; display: flex; align-items: center; gap: 8px; padding: 7px 12px 7px 10px; background: #fff; color: var(--tinta); border: 1px solid var(--linha); border-radius: 999px; box-shadow: 0 4px 14px rgba(21,33,26,.12); font-size: 12.5px; line-height: 1.2; opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s; }\n    .cot-pop.on { opacity: 1; transform: none; }\n    .cot-pop[hidden] { display: none; }\n    .cot-dot { width: 7px; height: 7px; border-radius: 50%; background: #2FB463; box-shadow: 0 0 0 0 rgba(47,180,99,.6); animation: cotpulse 1.8s infinite; flex: none; }\n    @keyframes cotpulse { 70% { box-shadow: 0 0 0 7px rgba(47,180,99,0); } 100% { box-shadow: 0 0 0 0 rgba(47,180,99,0); } }\n    .cot-txt { color: var(--muted); }\n    .cot-txt b { color: var(--tinta); font-weight: 800; }\n    .cot-up { color: var(--selo); font-weight: 700; }\n    .cot-x { background: none; border: 0; color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; padding: 0 0 0 2px; }\n    @media (prefers-reduced-motion: reduce) { .cot-dot { animation: none; } .cot-pop { transition: none; } }\n'
+COTACAO_JS = '    /* Cotação do dólar ao vivo (selo pequeno no canto) */\n    (function () {\n      var pop = document.getElementById("cot-pop");\n      var brl = document.getElementById("cot-brl");\n      var varEl = document.getElementById("cot-var");\n      var pctEl = document.getElementById("cot-pct");\n      var fmt = function (v) { return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };\n      var mostrar = function () { pop.hidden = false; requestAnimationFrame(function () { pop.classList.add("on"); }); };\n      document.getElementById("cot-x").addEventListener("click", function () { pop.hidden = true; clearInterval(timer); });\n      fetch("https://economia.awesomeapi.com.br/json/daily/USD-BRL/40")\n        .then(function (r) { return r.json(); })\n        .then(function (d) {\n          var hoje = parseFloat(d[0].bid);\n          if (!hoje) return;\n          brl.textContent = fmt(hoje);\n          var alvo = parseInt(d[0].timestamp, 10) - 30 * 86400, antes = null;\n          for (var i = 0; i < d.length; i++) { if (parseInt(d[i].timestamp, 10) <= alvo) { antes = parseFloat(d[i].bid); break; } }\n          if (antes) {\n            var pct = (hoje / antes - 1) * 100;\n            if (pct >= 0.5) { pctEl.textContent = pct.toLocaleString("pt-BR", { maximumFractionDigits: pct < 10 ? 1 : 0 }) + "%"; varEl.hidden = false; }\n          }\n          setTimeout(mostrar, 1500);\n        })\n        .catch(function () { /* API fora do ar: o selo não aparece */ });\n      /* atualiza o valor a cada 60 segundos */\n      var timer = setInterval(function () {\n        if (pop.hidden) return;\n        fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL")\n          .then(function (r) { return r.json(); })\n          .then(function (d) { var v = parseFloat(d.USDBRL.bid); if (v) brl.textContent = fmt(v); })\n          .catch(function () {});\n      }, 60000);\n    })();\n\n'
+
 def player(vid):
     if not vid:
         return '<div style="aspect-ratio:9/16;max-width:400px;margin:0 auto;background:#000;color:#fff;display:grid;place-items:center">VÍDEO</div>'
@@ -112,9 +117,13 @@ PAGES = {
     title="Dólar Automático com IA — Diego Ferreira",
     desc="Como eu vendo em dólar pra fora do Brasil, no automático, da minha casa.",
     top="Dólar Automático com IA",
-    headline="Como eu vendo em dólar pra fora do Brasil, no automático, de casa",
+    headline="Do CLT comum para vendas em dólar no automático",
+    headline_sub='Como eu fiz <strong>US$ 3.403,03</strong>, que dá <strong>R$ 20.340</strong>',
+    cotacao=True,
+    minimal=True,
+    hero_note="✓ Sem precisar aparecer ou gravar vídeos com seu rosto",
     sub="Sem aparecer, sem falar com cliente e começando com pouco. No vídeo eu abro a minha tela, mostro as vendas caindo em dólar na Hotmart e os resultados dos alunos. Assista até o fim.",
-    ones=[("US$ · €", "moedas que você recebe"), ("24h", "o robô atende por você"), ("0", "vezes que você aparece")],
+    ones=[("US$ · €", "moedas que você recebe"), ("100%", "método automático"), ("0", "Sem precisar aparecer ou gravar vídeos com seu rosto")],
     metodo="""
           <h2>Por que vender em dólar</h2>
           <p class="lead">O Brasil está saturado e o real é fraco. Lá fora tem gente querendo comprar e cada venda vale 5 a 6 vezes mais no seu bolso.</p>
@@ -226,27 +235,42 @@ def pixel(pid):
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=%s&ev=PageView&noscript=1" /></noscript>
   """ % (pid, pid)
 
+def hero_min_html(headline, sub, video, extra_after_video, note=""):
+    note_html = f'      <p class="hero-note">{note}</p>\n' if note else ""
+    return f'''  <header class="hero hero-min">
+    <div class="wrap">
+      <h1 class="headline">{headline}</h1>
+      <p class="headline-sub">{sub}</p>
+{note_html}
+      <div class="video">
+        {video}
+      </div>
+
+{extra_after_video}    </div>
+  </header>
+
+  <!-- Selo pequeno: cotação do dólar ao vivo -->
+  <div class="cot-pop" id="cot-pop" role="status" aria-live="polite" hidden>
+    <span class="cot-dot" aria-hidden="true"></span>
+    <span class="cot-txt">Dólar ao vivo <b id="cot-brl">R$ 5,91</b> <span class="cot-up" id="cot-var" hidden>▲ <span id="cot-pct">19%</span> em 30 dias</span></span>
+    <button class="cot-x" type="button" aria-label="Fechar cotação" id="cot-x">×</button>
+  </div>
+'''
+
+
 def build(key, p, vid, delay, px=None):
     ones = "\n".join('          <div class="stat"><span class="stat-num">%s</span><span class="one-label">%s</span></div>' % (n, l) for n, l in p["ones"])
     bonus = "\n".join('          <li><div><h3>%s</h3><p>%s</p>%s</div></li>' % (h, d, '<span class="value">%s</span>' % v if v else "") for h, d, v in p["bonus"])
     ladder = ('<ul class="ladder">%s</ul>' % "".join("<li>%s</li>" % x for x in p["ladder"])) if p["ladder"] else ""
-    css = head_css.replace("</style>", EXTRA_CSS + "  </style>")
-    return f"""<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{p['desc']}" />
-  <title>{p['title']}</title>
-  <link rel="icon" type="image/png" href="../favicon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
-  {pixel(px)}{css}
-</head>
-<body>
-
-  <!-- Hero: headline + números + vídeo (sempre visível) -->
+    cot = p.get("cotacao")
+    sub_html = f'        <p class="headline-sub">{p["headline_sub"]}</p>\n' if p.get("headline_sub") else ""
+    css = head_css.replace("</style>", EXTRA_CSS + (COTACAO_CSS if cot else "") + "  </style>")
+    cot_html = COTACAO_HTML if cot else ""
+    cot_js = COTACAO_JS if cot else ""
+    if p.get("minimal"):
+        hero_html = '  <!-- Hero: só headline, subtítulo e vídeo (sempre visível) -->\n' + hero_min_html(p["headline"], p["headline_sub"], player(vid), '      <a href="#oferta" class="jump esconder">Ver a oferta</a>\n', p.get("hero_note", ""))
+    else:
+        hero_html = f"""  <!-- Hero: headline + números + vídeo (sempre visível) -->
   <header class="hero">
     <div class="wrap">
       <div class="note">
@@ -266,7 +290,23 @@ def build(key, p, vid, delay, px=None):
       <a href="#oferta" class="jump esconder">Ver a oferta</a>
     </div>
   </header>
+"""
+    return f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{p['desc']}" />
+  <title>{p['title']}</title>
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
+  {pixel(px)}{css}
+</head>
+<body>
 
+{hero_html}
   <!-- Tudo abaixo só aparece no segundo em que o preço é falado no vídeo ({delay}s) -->
   <main class="esconder">
     <section class="block">
@@ -358,7 +398,7 @@ def build(key, p, vid, delay, px=None):
       setTimeout(reveal, (delaySeconds + 5) * 1000);
     }})();
 
-    /* Abas */
+{cot_js}    /* Abas */
     (function () {{
       var tabs = document.querySelectorAll(".tab");
       tabs.forEach(function (tab) {{
